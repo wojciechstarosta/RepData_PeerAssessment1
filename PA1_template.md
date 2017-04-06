@@ -2,7 +2,8 @@
 
 ## Libraries and loading and preprocessing the data
 
-```{r loaddata}
+
+```r
 library(dplyr)
 library(ggplot2)
 fileurl <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
@@ -12,54 +13,104 @@ activity <- read.csv("activity.csv")
 ```
 
 ## Grouping by day and creating histogram
-```{r grouping}
+
+```r
 total.day.steps <- activity %>% group_by(date) %>% summarise(sum(steps, na.rm = TRUE))
 ggplot(total.day.steps, aes(x = date, y = `sum(steps, na.rm = TRUE)`)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+![plot of chunk grouping](figure/grouping-1.png)
+
 ## Mean and median of steps taken each day
-```{r meanmedian}
+
+```r
 mean(total.day.steps$`sum(steps, na.rm = TRUE)`)
+```
+
+```
+## [1] 9354.23
+```
+
+```r
 median(total.day.steps$`sum(steps, na.rm = TRUE)`)
 ```
 
+```
+## [1] 10395
+```
+
 ## Average number of steps taken
-```{r avgsteps}
+
+```r
 avg.day.steps <- activity %>% group_by(interval) %>% summarise(mean(steps, na.rm = TRUE))
 ggplot(avg.day.steps, aes(x = interval, y = `mean(steps, na.rm = TRUE)`), type='l') + geom_line(linetype="solid",size = 1) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+![plot of chunk avgsteps](figure/avgsteps-1.png)
+
 ##Maximum number of steps in interval on average across all the days in the dataset
-```{r maxsteps}
+
+```r
 avg.day.steps[which.max(avg.day.steps$`mean(steps, na.rm = TRUE)`),]
 ```
 
+```
+## # A tibble: 1 × 2
+##   interval `mean(steps, na.rm = TRUE)`
+##      <int>                       <dbl>
+## 1      835                    206.1698
+```
+
 ## Total number of missing values
-```{r totmiss}
+
+```r
 nrow(is.na(activity))
 ```
 
+```
+## [1] 17568
+```
+
 ## Inputting missing with average number of steps by interval
-```{r input}
+
+```r
 activity.input <-merge(activity, avg.day.steps)
 activity.input$steps.input=ifelse(is.na(activity.input$steps), activity.input$`mean(steps, na.rm = TRUE)`, activity.input$steps)
 ```
 
 ## Grouping by day and creating histogram for inputted data
-```{r groupinput}
+
+```r
 total.day.steps.input <- activity.input %>% group_by(date) %>% summarise(sum(steps.input, na.rm = TRUE))
 ggplot(total.day.steps.input, aes(x = date, y = `sum(steps.input, na.rm = TRUE)`)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+![plot of chunk groupinput](figure/groupinput-1.png)
+
 ## Mean and median for inputted data
-```{r meanmedianinput}
+
+```r
 mean(total.day.steps.input$`sum(steps.input, na.rm = TRUE)`)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(total.day.steps.input$`sum(steps.input, na.rm = TRUE)`)
 ```
 
+```
+## [1] 10766.19
+```
+
 ## Adding day of the week and creating a plot
-```{r dayoftheweek}
+
+```r
 activity.weekday <- cbind(activity.input,weekdays(as.Date(activity.input$date)))
 activity.weekday$weekday <- ifelse(activity.weekday$`weekdays(as.Date(activity.input$date))` %in% c("poniedzia³ek", "wtorek", "œroda", "czwartek", "pi¹tek"), "weekday", "weekend")
 ggplot(activity.weekday, aes(interval, steps.input)) + geom_line(linetype="solid",size = 0.5) + facet_grid(weekday ~.) 
 ```
+
+![plot of chunk dayoftheweek](figure/dayoftheweek-1.png)
