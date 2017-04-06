@@ -110,7 +110,8 @@ median(total.day.steps.input$`sum(steps.input, na.rm = TRUE)`)
 ```r
 activity.weekday <- cbind(activity.input,weekdays(as.Date(activity.input$date)))
 activity.weekday$weekday <- ifelse(activity.weekday$`weekdays(as.Date(activity.input$date))` %in% c("poniedzia³ek", "wtorek", "œroda", "czwartek", "pi¹tek"), "weekday", "weekend")
-ggplot(activity.weekday, aes(interval, steps.input)) + geom_line(linetype="solid",size = 0.5) + facet_grid(weekday ~.) 
+avg.activity.weekday <- activity.weekday %>% group_by(interval, weekday) %>% summarise(mean(steps.input, na.rm = TRUE))
+ggplot(avg.activity.weekday, aes(interval, `mean(steps.input, na.rm = TRUE)`)) + geom_line(linetype="solid",size = 0.5) + facet_grid(weekday ~.) 
 ```
 
 ![plot of chunk dayoftheweek](figure/dayoftheweek-1.png)
