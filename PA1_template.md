@@ -16,7 +16,7 @@ activity <- read.csv("activity.csv")
 
 ```r
 total.day.steps <- activity %>% group_by(date) %>% summarise(sum(steps, na.rm = TRUE))
-ggplot(total.day.steps, aes(x = date, y = `sum(steps, na.rm = TRUE)`)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+qplot(x = `sum(steps, na.rm = TRUE)`, data=total.day.steps, bins = 40)
 ```
 
 ![plot of chunk grouping](figure/grouping-1.png)
@@ -82,7 +82,7 @@ activity.input$steps.input=ifelse(is.na(activity.input$steps), activity.input$`m
 
 ```r
 total.day.steps.input <- activity.input %>% group_by(date) %>% summarise(sum(steps.input, na.rm = TRUE))
-ggplot(total.day.steps.input, aes(x = date, y = `sum(steps.input, na.rm = TRUE)`)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+qplot(x = `sum(steps.input, na.rm = TRUE)`, data=total.day.steps.input, bins = 40)
 ```
 
 ![plot of chunk groupinput](figure/groupinput-1.png)

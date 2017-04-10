@@ -14,7 +14,7 @@ activity <- read.csv("activity.csv")
 ## Grouping by day and creating histogram
 ```{r grouping}
 total.day.steps <- activity %>% group_by(date) %>% summarise(sum(steps, na.rm = TRUE))
-ggplot(total.day.steps, aes(x = date, y = `sum(steps, na.rm = TRUE)`)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+qplot(x = `sum(steps, na.rm = TRUE)`, data=total.day.steps, bins = 40)
 ```
 
 ## Mean and median of steps taken each day
@@ -48,7 +48,7 @@ activity.input$steps.input=ifelse(is.na(activity.input$steps), activity.input$`m
 ## Grouping by day and creating histogram for inputted data
 ```{r groupinput}
 total.day.steps.input <- activity.input %>% group_by(date) %>% summarise(sum(steps.input, na.rm = TRUE))
-ggplot(total.day.steps.input, aes(x = date, y = `sum(steps.input, na.rm = TRUE)`)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+qplot(x = `sum(steps.input, na.rm = TRUE)`, data=total.day.steps.input, bins = 40)
 ```
 
 ## Mean and median for inputted data
